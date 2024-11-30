@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Chat</title>
+</head>
+<body>
+    <h1>WebSocket Chat</h1>
+    <div id="chatbox" style="border: 1px solid #000; width: 300px; height: 300px; overflow-y: scroll; margin-bottom: 10px;"></div>
+    <input type="text" id="message" placeholder="Type a message..." style="width: 80%;">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        // 连接到 WebSocket 服务器
+        const ws = new WebSocket('ws://localhost:8080');
+
+        const chatbox = document.getElementById('chatbox');
+
+        ws.onopen = () => {
+            console.log('Connected to WebSocket server');
+            chatbox.innerHTML += '<p><em>Connected to server</em></p>';
+        };
+
+        ws.onmessage = (event) => {
+            // 接收消息并显示在聊天框中
+            chatbox.innerHTML += `<p>${event.data}</p>`;
+            chatbox.scrollTop = chatbox.scrollHeight; // 自动滚动到底部
+        };
+
+        ws.onclose = () => {
+            console.log('Disconnected from WebSocket server');
+            chatbox.innerHTML += '<p><em>Disconnected from server</em></p>';
+        };
+
+        function sendMessage() {
+            const message = document.getElementById('message').value;
+            if (message) {
+                ws.send(message); // 发送消息到服务器
+                document.getElementById('message').value = '';
+            }
+        }
+    </script>
+</body>
+</html>
