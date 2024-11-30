@@ -6,5 +6,3 @@ COPY ./ /var/www/html/
 # 设置工作目录
 WORKDIR /var/www/html/
 
-# 安装 MySQL 扩展
-RUN docker-php-ext-install mysqli
